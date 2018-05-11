@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-
+using Galleon.Util;
 namespace Galleon.IO
 {
     public static class File
@@ -12,7 +12,13 @@ namespace Galleon.IO
         #region read
         public static byte[] ReadAllBytes(string filePath, string fileName, FileExtensions extension)
         {
-            string path = ((string.IsNullOrEmpty(filePath) == false) ? (filePath + "\\") : "") + fileName + "." + extension.ToString();
+            string path = string.Empty;
+            if (extension == FileExtensions.sec)
+            {
+                path = ((string.IsNullOrEmpty(filePath) == false) ? (filePath + "\\") : "") + fileName + "." + FileExtensions.dat.ToString();
+                return AesFileEncryptionPrivider.ReadFile(path);
+            }
+            path = ((string.IsNullOrEmpty(filePath) == false) ? (filePath + "\\") : "") + fileName + "." + extension.ToString();
             return System.IO.File.ReadAllBytes(path);
         }
         public static byte[] ReadAllBytes(string fileName, FileExtensions extension)
@@ -33,8 +39,17 @@ namespace Galleon.IO
         #region write
         public static void WriteAllBytes(this byte[] file, string filePath, string fileName, FileExtensions extension)
         {
-            string path = ((string.IsNullOrEmpty(filePath) == false) ? (filePath + "\\") : "") + fileName + "." + extension.ToString();
-            System.IO.File.WriteAllBytes(path, file);
+            string path = string.Empty;
+            if (extension == FileExtensions.sec)
+            {
+                path = ((string.IsNullOrEmpty(filePath) == false) ? (filePath + "\\") : "") + fileName + "." + FileExtensions.dat.ToString();
+                AesFileEncryptionPrivider.WriteFile(file, path);
+            }
+            else
+            {
+                path = ((string.IsNullOrEmpty(filePath) == false) ? (filePath + "\\") : "") + fileName + "." + extension.ToString();
+                System.IO.File.WriteAllBytes(path, file);
+            }
         }
         public static void WriteAllBytes(this byte[] file, string fileName, FileExtensions extension)
         {
@@ -56,9 +71,15 @@ namespace Galleon.IO
         #region text
 
         #region read
-        public static string ReadAllText(string filePath, string fileName, FileExtensions extension)
+        public static string ReadAllText(string filePath, string fileName, FileExtensions extension, StringEncoding encoding = StringEncoding.UTF8)
         {
-            string path = ((string.IsNullOrEmpty(filePath) == false) ? (filePath + "\\") : "") + fileName + "." + extension.ToString();
+            string path = string.Empty;
+            if (extension == FileExtensions.sec)
+            {
+                path = ((string.IsNullOrEmpty(filePath) == false) ? (filePath + "\\") : "") + fileName + "." + FileExtensions.dat.ToString();
+                return AesFileEncryptionPrivider.ReadFile(path, encoding);
+            }
+            path = ((string.IsNullOrEmpty(filePath) == false) ? (filePath + "\\") : "") + fileName + "." + extension.ToString();
             return System.IO.File.ReadAllText(path);
         }
         public static string ReadAllText(string fileName, FileExtensions extension)
@@ -77,10 +98,19 @@ namespace Galleon.IO
         #endregion
 
         #region write
-        public static void WriteAllText(this string file, string filePath, string fileName, FileExtensions extension)
+        public static void WriteAllText(this string file, string filePath, string fileName, FileExtensions extension, StringEncoding encoding = StringEncoding.UTF8)
         {
-            string path = ((string.IsNullOrEmpty(filePath) == false) ? (filePath + "\\") : "") + fileName + "." + extension.ToString();
-            System.IO.File.WriteAllText(path, file);
+            string path = string.Empty;
+            if (extension == FileExtensions.sec)
+            {
+                path = ((string.IsNullOrEmpty(filePath) == false) ? (filePath + "\\") : "") + fileName + "." + FileExtensions.dat.ToString();
+                AesFileEncryptionPrivider.WriteFile(file, path, encoding);
+            }
+            else
+            {
+                path = ((string.IsNullOrEmpty(filePath) == false) ? (filePath + "\\") : "") + fileName + "." + extension.ToString();
+                System.IO.File.WriteAllText(path, file);
+            }
         }
         public static void WriteAllText(this string file, string fileName, FileExtensions extension)
         {

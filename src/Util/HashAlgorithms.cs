@@ -4,7 +4,11 @@ using System.Text;
 
 namespace Galleon.Util
 {
-    class Utilities
+    public enum HashAlgorithms
     {
+        SHA256,
+        SHA512,
+        Blake2b,
+        DoubleBlake2b
     }
 }

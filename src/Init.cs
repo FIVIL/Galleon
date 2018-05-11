@@ -6,5 +6,11 @@ namespace Galleon
 {
     public class Init
     {
+        //db
+        //db.blocks
+        //db.transactions
+        //db.private
+        //logs
+        //config file
     }
 }

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
-
-namespace Galleon.Crypto
+using Galleon.Util;
+namespace Galleon.IO
 {
-    public static class AesFileEncryptionPrivider
+    class AesFileEncryptionPrivider
     {
         private static string EncryptionKey { get; set; } = null;
         public static void Create(string key)
@@ -15,22 +15,37 @@ namespace Galleon.Crypto
             EncryptionKey = key;
         }
         #region write
-        public static void WriteFileASCII(string clearText, string FilePath)
+        private static void WriteFileASCII(string clearText, string FilePath)
         {
             byte[] clearBytes = Encoding.ASCII.GetBytes(clearText);
             WriteFile(clearBytes, FilePath);
         }
-        public static void WriteFileBase64(string clearText, string FilePath)
+        private static void WriteFileBase64(string clearText, string FilePath)
         {
             byte[] clearBytes = Convert.FromBase64String(clearText);
             WriteFile(clearBytes, FilePath);
         }
-        public static void WriteFile(string clearText, string FilePath)
+        public static void WriteFile(string clearText, string filePath, StringEncoding encoding = StringEncoding.UTF8)
         {
-            byte[] clearBytes = Encoding.UTF8.GetBytes(clearText);
-            WriteFile(clearBytes, FilePath);
+            byte[] clearBytes = null;
+            switch (encoding)
+            {
+                case StringEncoding.Base64:
+                    clearBytes = Convert.FromBase64String(clearText);
+                    break;
+                case StringEncoding.UTF8:
+                    clearBytes = Encoding.UTF8.GetBytes(clearText);
+                    break;
+                case StringEncoding.ASCII:
+                    clearBytes = Encoding.ASCII.GetBytes(clearText);
+                    break;
+                default:
+                    clearBytes = Encoding.UTF8.GetBytes(clearText);
+                    break;
+            }
+            WriteFile(clearBytes, filePath);
         }
-        public static void WriteFile(byte[] clearBytes, string FilePath)
+        public static void WriteFile(byte[] clearBytes, string filePath)
         {
             if (string.IsNullOrWhiteSpace(EncryptionKey)) throw new Exception("No key");
             using (Aes encryptor = Aes.Create())
@@ -45,7 +60,7 @@ namespace Galleon.Crypto
                         cs.Write(clearBytes, 0, clearBytes.Length);
                         cs.Close();
                     }
-                    File.WriteAllBytes(FilePath, ms.ToArray());
+                    System.IO.File.WriteAllBytes(filePath, ms.ToArray());
                 }
             }
 
@@ -53,23 +68,33 @@ namespace Galleon.Crypto
         #endregion
 
         #region read
-        public static string ReadFileString(string FilePath)
+        public static string ReadFile(string filePath,StringEncoding encoding)
         {
-            return Encoding.UTF8.GetString(ReadFile(FilePath));
+            switch (encoding)
+            {
+                case StringEncoding.Base64:
+                    return ReadFileBase64String(filePath);
+                case StringEncoding.UTF8:
+                    return Encoding.UTF8.GetString(ReadFile(filePath));
+                case StringEncoding.ASCII:
+                    return ReadFileASCIIString(filePath);
+                default:
+                    return Encoding.UTF8.GetString(ReadFile(filePath));
+            }
         }
-        public static string ReadFileASCIIString(string FilePath)
+        private static string ReadFileASCIIString(string FilePath)
         {
             return Encoding.ASCII.GetString(ReadFile(FilePath));
         }
-        public static string ReadFileBase64String(string FilePath)
+        private static string ReadFileBase64String(string FilePath)
         {
             return Convert.ToBase64String(ReadFile(FilePath));
         }
-        public static byte[] ReadFile(string FilePath)
+        public static byte[] ReadFile(string filePath)
         {
             if (string.IsNullOrWhiteSpace(EncryptionKey)) throw new Exception("No key");
             //cipherText = cipherText.Replace(" ", "+");
-            byte[] cipherBytes = File.ReadAllBytes(FilePath);
+            byte[] cipherBytes = System.IO.File.ReadAllBytes(filePath);
             //File.Delete(FilePath);
             byte[] RetValuel;
             using (Aes encryptor = Aes.Create())

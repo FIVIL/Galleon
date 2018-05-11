@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
-
+using Galleon.IO;
 namespace Galleon.Crypto
 {
     public class KeyContainer : IDisposable
     {
-        private byte[] PrivateKey { get; set; }
+        public byte[] PrivateKey { get; private set; }
         public byte[] PublicKey { get; private set; }
         public string PublicKeyS { get; private set; }
         public RSACryptoServiceProvider Rsa { get; private set; }
@@ -20,7 +20,7 @@ namespace Galleon.Crypto
         }
         public KeyContainer(string filepath)
         {
-            PrivateKey = AesFileEncryptionPrivider.ReadFile(filepath);
+            PrivateKey = Galleon.IO.File.ReadAllBytes(filepath, IO.FileExtensions.sec);
             Rsa = new RSACryptoServiceProvider();
             Rsa.ImportCspBlob(PrivateKey);
             PrivateKey = Rsa.ExportCspBlob(true);
@@ -38,7 +38,7 @@ namespace Galleon.Crypto
         public void ExportPrivateKey(string filename)
         {
             if (Rsa.PublicOnly) throw new Exception("no private key!");
-            AesFileEncryptionPrivider.WriteFile(PrivateKey, filename);
+            PrivateKey.WriteAllBytes(filename, FileExtensions.sec);
         }
 
         #region IDisposable Support

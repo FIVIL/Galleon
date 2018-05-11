@@ -8,5 +8,7 @@ namespace Galleon.IO
     {
         dat,
         txt,
+        sec,
+        log
     }
 }

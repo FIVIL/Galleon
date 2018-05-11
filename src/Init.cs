@@ -1,16 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
+using Galleon.Db;
+using Galleon.Util;
 namespace Galleon
 {
-    public class Init
+    public static class Init
     {
-        //db
-        //db.blocks
-        //db.transactions
-        //db.private
-        //logs
-        //config file
+        public static Config Config { get; private set; }
+        public static bool Initialized { get; private set; }
+        public const string configdat = "config";
+        static Init()
+        {
+            Initialized = false;
+        }
+        public static void Initizer(string PassWord)
+        {
+            if (Initialized) return;
+            Initialized = true;
+            Galleon.IO.AesFileEncryptionPrivider.Create(PassWord);
+            if (System.IO.File.Exists(Galleon.IO.File.PathMaker(configdat, IO.FileExtensions.dat))) InitizerLogin(PassWord);
+            else InitizerFirstLogin(PassWord);
+        }
+        private static void InitizerFirstLogin(string PassWord)
+        {
+            Config cf = new Config();
+            cf.PassWord = PassWord;
+            cf.FilePathRoot = "";
+            var cfj = cf.ToJson(Newtonsoft.Json.Formatting.Indented);
+            Galleon.IO.File.WriteAllText(cfj, configdat, IO.FileExtensions.sec);
+            System.IO.Directory.CreateDirectory("Db");
+            System.IO.Directory.CreateDirectory(@"Db\blocks");
+            System.IO.Directory.CreateDirectory(@"Db\transactions");
+            System.IO.Directory.CreateDirectory(@"Db\private");
+            System.IO.Directory.CreateDirectory(@"logs");
+            Config = cf;
+        }
+        private static void InitizerLogin(string PassWord)
+        {
+            Config = Galleon.IO.File.ReadAllText(configdat, IO.FileExtensions.sec).FromJson<Config>();
+        }
     }
 }

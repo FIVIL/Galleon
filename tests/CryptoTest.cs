@@ -11,6 +11,7 @@ namespace Galleon.tests
         [Fact]
         public void TestAes()
         {
+            Init.Initizer("Xunit");
             var aes = new AesEncryptionProvider();
             var key = aes.Key;
             var aes2 = new AesEncryptionProvider();
@@ -39,9 +40,9 @@ namespace Galleon.tests
         [Fact]
         public void TestRsaSignature()
         {
+            Init.Initizer("Xunit");
             var rsasign1 = new RsaSignatureProvider();
             var rsasign2 = new RsaSignatureProvider(rsasign1.PublicKey);
-            AesFileEncryptionPrivider.Create("Xunit");
             rsasign1.ExportPrivateKey("testkey.dat");
             var rsasign3 = new RsaSignatureProvider("testkey.dat");
             var rsasign4 = new RsaSignatureProvider();
@@ -76,9 +77,9 @@ namespace Galleon.tests
         [Fact]
         public void TestRsa()
         {
+            Init.Initizer("Xunit");
             var rsa1 = new RsaEncryptionProvider();
             var rsa2 = new RsaEncryptionProvider(rsa1.PublicKey);
-            AesFileEncryptionPrivider.Create("Xunit");
             rsa1.ExportKey("testkey.dat");
             var rsa3 = new RsaEncryptionProvider("testkey.dat");
             var rsa4 = new RsaEncryptionProvider();

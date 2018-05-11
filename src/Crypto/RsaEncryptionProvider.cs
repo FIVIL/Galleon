@@ -49,7 +49,7 @@ namespace Galleon.Crypto
             }
 
         }
-        public string Decrypt(string message, StringEncoding encoding)
+        public string Decrypt(string message, StringEncoding encoding = StringEncoding.UTF8)
         {
             var byt = Convert.FromBase64String(message);
             if (byt[0] == 0 && byt[2] == 0xff)

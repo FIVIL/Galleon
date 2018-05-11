@@ -10,7 +10,6 @@
     <Folder Include="Networking\P2P\" />
     <Folder Include="BlockChain\" />
     <Folder Include="Genesis\" />
-    <Folder Include="Db\" />
     <Folder Include="Util\Attributes\" />
     <Folder Include="Storage\" />
   </ItemGroup>

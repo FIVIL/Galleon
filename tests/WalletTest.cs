@@ -17,7 +17,7 @@ namespace Galleon.tests
         [Fact]
         public void TestWallet()
         {
-            AesFileEncryptionPrivider.Create("Xunit");
+            Init.Initizer("Xunit");
             DataUtilities.Principles.TryAdd((DataUtilities.Version).GetPrinciplesKey(Principles.PrinciplesType.Transaction), new Galleon.Principles.TransactionPrinciples(1, "hi", "short", 1000, 1));
             DataUtilities.PrivateKeyFilePath = "key0.dat";
             var W0 = new Wallet();

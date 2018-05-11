@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Galleon</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Crypto\" />
+    <Folder Include="IO\" />
+    <Folder Include="Networking\Http\" />
+    <Folder Include="Networking\P2P\" />
+    <Folder Include="BlockChain\" />
+    <Folder Include="Genesis\" />
+    <Folder Include="Db\" />
+    <Folder Include="Util\Attributes\" />
+    <Folder Include="Wallet\" />
+    <Folder Include="Transaction\" />
+    <Folder Include="Principles\" />
+    <Folder Include="Storage\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+  </ItemGroup>
+
+</Project>

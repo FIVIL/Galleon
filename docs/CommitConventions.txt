@@ -1,0 +1,14 @@
+﻿ic-[commit number]:initial commits
+d-[class name]:[function/prop name]- debug
+re-[namespace]: renaming
+np:new csproj
+nf:new folder
+nc-[namespace]: new class
+uc-[namespace]-[class name]:update class
+ni-[namespace]: new interface
+ui-[namespace]-[interface name]:update interface
+nt-[class for test]-[function/prop for test]:new test unit
+ut-[test name]:update test
+u:major update
+tr-[version]:publishing new test release
+Release-[vesrion]:making ready for new release

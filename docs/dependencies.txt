@@ -1,0 +1,3 @@
+﻿MS.netcore->2
+json.net->11.0.2(cli/src/tests)
+xunit->2.3.1(tests)

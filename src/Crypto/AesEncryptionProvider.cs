@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
-
+using Galleon.Util;
 namespace Galleon.Crypto
 {
     public class AesEncryptionProvider : IDisposable
@@ -13,7 +13,7 @@ namespace Galleon.Crypto
         #region ctor
         static AesEncryptionProvider()
         {
-            Rnd = new Random();
+            Rnd = Galleon.Util.DataUtilities.Rnd;
         }
         /// <summary>
         /// create new instance with known key
@@ -51,13 +51,9 @@ namespace Galleon.Crypto
         #endregion
 
         #region encrypt
-        public string EncryptASCII(string clearText)
+        public string Encrypt(string clearText, StringEncoding encoding = StringEncoding.UTF8)
         {
-            return Encrypt(Encoding.ASCII.GetBytes(clearText));
-        }
-        public string Encrypt(string clearText)
-        {
-            return Encrypt(Encoding.UTF8.GetBytes(clearText));
+            return Encrypt(clearText.FromString(encoding));
         }
         public string Encrypt(byte[] clearBytes)
         {
@@ -82,13 +78,9 @@ namespace Galleon.Crypto
         #endregion
 
         #region decrypt
-        public string DecrptyASCII(string cipherText)
+        public string Decrpty(string cipherText, StringEncoding encoding = StringEncoding.UTF8)
         {
-            return Encoding.ASCII.GetString(Decrypt(cipherText));
-        }
-        public string Decrpty(string cipherText)
-        {
-            return Encoding.UTF8.GetString(Decrypt(cipherText));
+            return Decrypt(cipherText).ToString(encoding);
         }
         public byte[] Decrypt(string cipherText)
         {

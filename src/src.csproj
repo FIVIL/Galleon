@@ -6,7 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="IO\" />
     <Folder Include="Networking\Http\" />
     <Folder Include="Networking\P2P\" />
     <Folder Include="BlockChain\" />

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
-
+using Galleon.Util;
 namespace Galleon.Crypto
 {
     public class RsaSignatureProvider : IDisposable
@@ -59,14 +59,14 @@ namespace Galleon.Crypto
             var hash = Sha256.ComputeHash(data);
             return new Signture(RSAFormatter.CreateSignature(hash));
         }
-        public Signture GenerateSigntureASCII(string data)
+        private Signture GenerateSigntureASCII(string data)
         {
             var hash = Sha256.ComputeHash(Encoding.ASCII.GetBytes(data));
             return new Signture(RSAFormatter.CreateSignature(hash));
         }
-        public Signture GenerateSignture(string data)
+        public Signture GenerateSignture(string data,StringEncoding encoding=StringEncoding.UTF8)
         {
-            var hash = Sha256.ComputeHash(Encoding.UTF8.GetBytes(data));
+            var hash = Sha256.ComputeHash(data.FromString(encoding));
             return new Signture(RSAFormatter.CreateSignature(hash));
         }
         #endregion
@@ -77,14 +77,14 @@ namespace Galleon.Crypto
             var hash = Sha256.ComputeHash(data);
             return RSADeformatter.VerifySignature(hash, sign);
         }
-        public bool VerifySignatureASCII(string data, Signture sign)
+        private bool VerifySignatureASCII(string data, Signture sign)
         {
             var hash = Sha256.ComputeHash(Encoding.ASCII.GetBytes(data));
             return RSADeformatter.VerifySignature(hash, sign);
         }
-        public bool VerifySignature(string data, Signture sign)
+        public bool VerifySignature(string data, Signture sign,StringEncoding encoding=StringEncoding.UTF8)
         {
-            var hash = Sha256.ComputeHash(Encoding.UTF8.GetBytes(data));
+            var hash = Sha256.ComputeHash(data.FromString(encoding));
             return RSADeformatter.VerifySignature(hash, sign);
         }
         #endregion

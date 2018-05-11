@@ -8,7 +8,6 @@
   <ItemGroup>
     <Folder Include="Networking\Http\" />
     <Folder Include="Networking\P2P\" />
-    <Folder Include="BlockChain\" />
     <Folder Include="Genesis\" />
     <Folder Include="Util\Attributes\" />
     <Folder Include="Storage\" />

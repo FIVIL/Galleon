@@ -19,7 +19,8 @@ namespace Galleon.Util
             Rnd = new Random();
             Principles = new Dictionary<string, BasePrinciples>();
             Version = 1;
-            LogFilePath = string.Empty;
+            LogFilePath = @"logs\";
+            PrivateKeyFilePath = @"Db\private\";
         }
     }
 }

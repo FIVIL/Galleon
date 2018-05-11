@@ -1,3 +1,4 @@
-﻿MS.netcore->2
+﻿MS.netcore->2(cli/tests)
+Ms.netstandard2->(src)
 json.net->11.0.2(cli/src/tests)
 xunit->2.3.1(tests)

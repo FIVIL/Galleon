@@ -68,28 +68,55 @@ namespace Galleon.Util
         #endregion
 
         #region String Formating
-        public static string ToBase64String(this byte[] bytes)
+        public static string ToString(this byte[] bytes, StringEncoding encoding)
+        {
+            switch (encoding)
+            {
+                case StringEncoding.Base64:
+                    return ToBase64String(bytes);
+                case StringEncoding.UTF8:
+                    return ToUTF8String(bytes);
+                case StringEncoding.ASCII:
+                    return ToASCIIString(bytes);
+                default:
+                    return ToBase64String(bytes);
+            }
+        }
+        private static string ToBase64String(byte[] bytes)
         {
             return Convert.ToBase64String(bytes);
         }
-        public static string ToUTF8String(this byte[] bytes)
+        private static string ToUTF8String(byte[] bytes)
         {
             return Encoding.UTF8.GetString(bytes);
         }
-        public static string ToASCIIString(this byte[] bytes)
+        private static string ToASCIIString(byte[] bytes)
         {
             return Encoding.ASCII.GetString(bytes);
         }
-
-        public static byte[] FromBase64String(this string text)
+        public static byte[] FromString(this string text, StringEncoding encoding)
+        {
+            switch (encoding)
+            {
+                case StringEncoding.Base64:
+                    return FromBase64String(text);
+                case StringEncoding.UTF8:
+                    return FromUTF8String(text);
+                case StringEncoding.ASCII:
+                    return FromASCIIString(text);
+                default:
+                    return FromBase64String(text);
+            }
+        }
+        private static byte[] FromBase64String(string text)
         {
             return Convert.FromBase64String(text);
         }
-        public static byte[] FromUTF8String(this string text)
+        private static byte[] FromUTF8String(string text)
         {
             return Encoding.UTF8.GetBytes(text);
         }
-        public static byte[] FromASCIIString(this string text)
+        private static byte[] FromASCIIString(string text)
         {
             return Encoding.ASCII.GetBytes(text);
         }

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Galleon.Util;
-namespace Galleon.Transaction
+namespace Galleon.TransactionManager
 {
     public class TransactionOutput
     {

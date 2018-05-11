@@ -5,7 +5,7 @@ using Galleon.Crypto;
 using Newtonsoft.Json;
 using Galleon.Principles;
 using Galleon.Util;
-namespace Galleon.Transaction
+namespace Galleon.TransactionManager
 {
     public class Transaction : IPrinciples
     {

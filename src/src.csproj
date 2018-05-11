@@ -12,7 +12,6 @@
     <Folder Include="Genesis\" />
     <Folder Include="Db\" />
     <Folder Include="Util\Attributes\" />
-    <Folder Include="Wallet\" />
     <Folder Include="Storage\" />
   </ItemGroup>
 

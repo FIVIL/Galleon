@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
-
+using Galleon.Util;
 namespace Galleon.Crypto
 {
     class ShortMessageRsa
@@ -16,15 +16,15 @@ namespace Galleon.Crypto
             KeyPair = keyPair;
         }
         #endregion
-        public string Encrypt(string message)
+        public string Encrypt(string message,StringEncoding encoding=StringEncoding.UTF8)
         {
-            var byt = Encoding.UTF8.GetBytes(message);
+            var byt = message.FromString(encoding);
             return Convert.ToBase64String(KeyPair.Rsa.Encrypt(byt, false));
         }
-        public string Decrypt(string message)
+        public string Decrypt(string message,StringEncoding encoding=StringEncoding.UTF8)
         {
             var byt = Convert.FromBase64String(message);
-            return Encoding.UTF8.GetString(KeyPair.Rsa.Decrypt(byt, false));
+            return KeyPair.Rsa.Decrypt(byt, false).ToString(encoding);
         }
     }
 }

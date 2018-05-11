@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using Galleon.Util;
 namespace Galleon.Crypto
 {
     class LongMessageRsa
@@ -16,13 +17,13 @@ namespace Galleon.Crypto
             KeyPair = keyPair;
         }
         #endregion
-        public string Encrypt(string message)
+        public string Encrypt(string message,StringEncoding encoding=StringEncoding.UTF8)
         {
             //create new aes encryptor with random generated key
             Aes = new AesEncryptionProvider();
             Console.WriteLine(Aes.Key);
             //first encrypt the long message with aes
-            var EncryptedAesMessage = Aes.Encrypt(message);
+            var EncryptedAesMessage = Aes.Encrypt(message,encoding);
             var EncryptedAesMessageByte = Convert.FromBase64String(EncryptedAesMessage);
             //then encrypt aes key using rsa
             var EncryptedKey = KeyPair.Rsa.Encrypt(Encoding.ASCII.GetBytes(Aes.Key), false);
@@ -37,7 +38,7 @@ namespace Galleon.Crypto
             Bl.AddRange(EncryptedAesMessageByte);
             return Convert.ToBase64String(Bl.ToArray());
         }
-        public string Decrypt(string message)
+        public string Decrypt(string message,StringEncoding encoding=StringEncoding.UTF8)
         {
             var BL = Convert.FromBase64String(message);
             if (BL[0] != 0) throw new Exception("wrong message format");
@@ -50,7 +51,7 @@ namespace Galleon.Crypto
             if (EncryptedMessageP[0] != 0) throw new Exception("wrong message format");
             var EncryptedMessage = EncryptedMessageP.Skip(1).ToArray();
             Aes = new AesEncryptionProvider(DecryptedKeyText);
-            return Aes.Decrpty(Convert.ToBase64String(EncryptedMessage));
+            return Aes.Decrpty(Convert.ToBase64String(EncryptedMessage),encoding);
         }
     }
 }

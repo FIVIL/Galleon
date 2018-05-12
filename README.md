@@ -1,4 +1,5 @@
 # Galleon
+-----------------------------------
 Galleon Coin (GWC) is a cryptocurrency project based on totally new blockchain system, implemented using .net standard 2 and C# programming language.
 ![coverage 30%](https://img.shields.io/badge/coverage-30%-yellow.svg) 
 ![.net_standard 2](https://img.shields.io/badge/.net_standard-2-blue.svg)

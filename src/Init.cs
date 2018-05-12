@@ -14,18 +14,18 @@ namespace Galleon
         {
             Initialized = false;
         }
-        public static void Initizer(string PassWord)
+        public static void Initizer(string PassWord, Func<string> getPassWord)
         {
             if (Initialized) return;
             Initialized = true;
             Galleon.IO.AesFileEncryptionPrivider.Create(PassWord);
             if (System.IO.File.Exists(Galleon.IO.File.PathMaker(configdat, IO.FileExtensions.dat))) InitizerLogin(PassWord);
-            else InitizerFirstLogin(PassWord);
+            else InitizerFirstLogin(getPassWord);
         }
-        private static void InitizerFirstLogin(string PassWord)
+        private static void InitizerFirstLogin(Func<string> getPassWord)
         {
             Config cf = new Config();
-            cf.PassWord = PassWord;
+            cf.PassWord = getPassWord();
             cf.FilePathRoot = "";
             var cfj = cf.ToJson(Newtonsoft.Json.Formatting.Indented);
             Galleon.IO.File.WriteAllText(cfj, configdat, IO.FileExtensions.sec);

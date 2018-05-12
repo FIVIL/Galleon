@@ -104,6 +104,7 @@ namespace Galleon.TransactionManager
             IsBlockReward = false;
             Apply(TransactionVersion);
         }
+        [Obsolete("only use in Genesis phase.")]
         /// <summary>
         /// Genesis Creator
         /// </summary>

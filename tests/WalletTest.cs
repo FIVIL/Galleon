@@ -19,17 +19,13 @@ namespace Galleon.tests
         {
             Init.Initizer("Xunit");
             DataUtilities.Principles.TryAdd((DataUtilities.Version).GetPrinciplesKey(Principles.PrinciplesType.Transaction), new Galleon.Principles.TransactionPrinciples(1, "hi", "short", 1000, 1));
-            DataUtilities.PrivateKeyFilePath = "key0.dat";
             var W0 = new Wallet();
-            DataUtilities.PrivateKeyFilePath = "key1.dat";
             var W1 = new Wallet();
-            DataUtilities.PrivateKeyFilePath = "key2.dat";
             var W2 = new Wallet();
-            DataUtilities.PrivateKeyFilePath = "key3.dat";
             var W3 = new Wallet();
             var T = new Transaction(DataUtilities.Version, W0.PublicKey, W1.PublicKey, 100, 0,
                 Guid.NewGuid().ToString().GetHashString(HashAlgorithms.SHA256));
-            T.GenerateSignture("key0.dat");
+            T.GenerateSignture(Galleon.IO.File.PrivateKeyFileName);
             T.TransactionOutputs.Add(new TransactionOutput(T.Reciepient, T.Amount, T.TransactionHash));
             utxos.Add(T.TransactionOutputs[0].HashString, T.TransactionOutputs[0]);
             Assert.True(T.Process(x => true, null, null, Cleaner));
@@ -41,7 +37,7 @@ namespace Galleon.tests
             Assert.Equal(0, W1.Balance);
             Assert.Equal(0, W2.Balance);
             var TF1 = new Transaction(DataUtilities.Version, W3.PublicKey, 10,10);
-            TF1.GenerateSignture("key3.dat");
+            TF1.GenerateSignture(Galleon.IO.File.PrivateKeyFileName);
             TF1.TransactionOutputs.Add(new TransactionOutput(TF1.Reciepient, TF1.Amount, TF1.TransactionHash));
             utxos.Add(TF1.TransactionOutputs[0].HashString, TF1.TransactionOutputs[0]);
             Assert.True(T2.Process(x => false, null, CFA, Cleaner));
@@ -61,7 +57,7 @@ namespace Galleon.tests
             TF2.TransactionOutputs.Add(new TransactionOutput(TF2.Reciepient, TF2.Amount, TF2.TransactionHash));
             utxos.Add(TF2.TransactionOutputs[0].HashString, TF2.TransactionOutputs[0]);
             Assert.True(T3.Process(x => false, null, CFA, Cleaner));
-            TF2.GenerateSignture("key3.dat");
+            TF2.GenerateSignture(Galleon.IO.File.PrivateKeyFileName);
             Assert.True(TF2.Process(x => false, checkforminerreward, CFA, Cleaner));
             W1.Refresh(refresh);
             W2.Refresh(refresh);

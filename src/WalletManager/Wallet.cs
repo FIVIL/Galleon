@@ -23,8 +23,8 @@ namespace Galleon.WalletManager
         public Wallet()
         {
             KeyPair = new KeyContainer();
-            KeyPair.ExportPrivateKey(DataUtilities.PrivateKeyFilePath);
-            PrivateKeyFilePath = DataUtilities.PrivateKeyFilePath;
+            KeyPair.ExportPrivateKey(Galleon.IO.File.PrivateKeyFileName);
+            PrivateKeyFilePath = Galleon.IO.File.PrivateKeyFileName;
         }
         /// <summary>
         /// cloning wallet from existing privatekey for next logins.

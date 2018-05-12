@@ -25,20 +25,20 @@ namespace Galleon.LoggerManager
         }
         public static void ReadLogs()
         {
-            var logs = Galleon.IO.File.ReadAllText(DataUtilities.LogFilePath, LogFileName, IO.FileExtensions.log);
+            var logs = Galleon.IO.File.ReadAllText(Galleon.IO.File.LogsFilePath, LogFileName, IO.FileExtensions.log);
             Logs = logs.FromJson<List<Log>>();
         }
         public static void WriteLogs()
         {
             if (Logs.Count >= 9999)
             {
-                Galleon.IO.File.WriteAllText(Logs.ToJson(), DataUtilities.LogFilePath, LogFileName, IO.FileExtensions.log);
+                Galleon.IO.File.WriteAllText(Logs.ToJson(), Galleon.IO.File.LogsFilePath, LogFileName, IO.FileExtensions.log);
                 ++Count;
                 LogFileName = "LogsFrom" + Count.ToString();
             }
             else
             {
-                Galleon.IO.File.WriteAllText(Logs.ToJson(), DataUtilities.LogFilePath, LogFileName, IO.FileExtensions.log);
+                Galleon.IO.File.WriteAllText(Logs.ToJson(), Galleon.IO.File.LogsFilePath, LogFileName, IO.FileExtensions.log);
             }
         }
     }

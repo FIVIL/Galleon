@@ -7,6 +7,38 @@ namespace Galleon.IO
 {
     public static class File
     {
+        #region statics
+        private const string _dbFilePath = "Db";
+        private const string _privateKeyFilePath = @"Db\private\";
+        private const string _privateKeyFileName = "privatekey";
+        private const string _blocksFilePath = @"Db\blocks";
+        private const string _transactionFilePath = @"Db\transactions";
+        private const string _logsFilePath = "logs";
+        public static string FilePathRoot
+        {
+            get
+            {
+                if (Init.Config != null)
+                {
+                    if (string.IsNullOrWhiteSpace(Init.Config.FilePathRoot))
+                        return string.Empty;
+                    else return Init.Config.FilePathRoot + "\\";
+                }
+                return string.Empty;
+            }
+        }
+        public static string DbFilePath => FilePathRoot + _dbFilePath;
+
+        public static string PrivateKeyFilePath => FilePathRoot + _privateKeyFilePath;
+        public static string PrivateKeyFileName => PrivateKeyFilePath + _privateKeyFileName;
+
+        public static string BlocksFilePath => FilePathRoot + _blocksFilePath;
+
+        public static string TransactionFilePath => FilePathRoot + _transactionFilePath;
+
+        public static string LogsFilePath => FilePathRoot + _logsFilePath;
+
+        #endregion
         #region byte[]
 
         #region read

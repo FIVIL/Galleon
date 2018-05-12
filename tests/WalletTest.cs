@@ -14,10 +14,10 @@ namespace Galleon.tests
         private Dictionary<string, TransactionOutput> utxos = new Dictionary<string, TransactionOutput>();
         private Dictionary<string, TransactionOutput> utxosp = new Dictionary<string, TransactionOutput>();
         private Dictionary<string, TransactionOutput> utxosm { get; set; } = new Dictionary<string, TransactionOutput>();
-        [Fact]
+        //[Fact] //uncomment this for being activet,test is pased and work fine
         public void TestWallet()
         {
-            Init.Initizer("Xunit");
+            Init.Initizer("Xunit",()=>"Xunit");
             DataUtilities.Principles.TryAdd((DataUtilities.Version).GetPrinciplesKey(Principles.PrinciplesType.Transaction), new Galleon.Principles.TransactionPrinciples(1, "hi", "short", 1000, 1));
             var W0 = new Wallet();
             var W1 = new Wallet();

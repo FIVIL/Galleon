@@ -11,7 +11,7 @@ namespace Galleon.tests
         [Fact]
         public void TransactionTest1()
         {
-            Init.Initizer("Xunit");
+            Init.Initizer("Xunit",()=> "Xunit");
             var key1 = new KeyContainer();
             var key2 = new KeyContainer();
             key1.ExportPrivateKey("key.dat");

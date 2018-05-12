@@ -15,34 +15,9 @@ namespace Galleon.IO
             EncryptionKey = key;
         }
         #region write
-        private static void WriteFileASCII(string clearText, string FilePath)
-        {
-            byte[] clearBytes = Encoding.ASCII.GetBytes(clearText);
-            WriteFile(clearBytes, FilePath);
-        }
-        private static void WriteFileBase64(string clearText, string FilePath)
-        {
-            byte[] clearBytes = Convert.FromBase64String(clearText);
-            WriteFile(clearBytes, FilePath);
-        }
         public static void WriteFile(string clearText, string filePath, StringEncoding encoding = StringEncoding.UTF8)
         {
-            byte[] clearBytes = null;
-            switch (encoding)
-            {
-                case StringEncoding.Base64:
-                    clearBytes = Convert.FromBase64String(clearText);
-                    break;
-                case StringEncoding.UTF8:
-                    clearBytes = Encoding.UTF8.GetBytes(clearText);
-                    break;
-                case StringEncoding.ASCII:
-                    clearBytes = Encoding.ASCII.GetBytes(clearText);
-                    break;
-                default:
-                    clearBytes = Encoding.UTF8.GetBytes(clearText);
-                    break;
-            }
+            var clearBytes = clearText.FromString(encoding);
             WriteFile(clearBytes, filePath);
         }
         public static void WriteFile(byte[] clearBytes, string filePath)
@@ -68,27 +43,9 @@ namespace Galleon.IO
         #endregion
 
         #region read
-        public static string ReadFile(string filePath,StringEncoding encoding)
+        public static string ReadFile(string filePath, StringEncoding encoding)
         {
-            switch (encoding)
-            {
-                case StringEncoding.Base64:
-                    return ReadFileBase64String(filePath);
-                case StringEncoding.UTF8:
-                    return Encoding.UTF8.GetString(ReadFile(filePath));
-                case StringEncoding.ASCII:
-                    return ReadFileASCIIString(filePath);
-                default:
-                    return Encoding.UTF8.GetString(ReadFile(filePath));
-            }
-        }
-        private static string ReadFileASCIIString(string FilePath)
-        {
-            return Encoding.ASCII.GetString(ReadFile(FilePath));
-        }
-        private static string ReadFileBase64String(string FilePath)
-        {
-            return Convert.ToBase64String(ReadFile(FilePath));
+            return ReadFile(filePath).ToString(encoding);
         }
         public static byte[] ReadFile(string filePath)
         {

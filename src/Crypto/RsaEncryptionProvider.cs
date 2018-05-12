@@ -36,7 +36,7 @@ namespace Galleon.Crypto
         #endregion
         public string Encrypt(string message, StringEncoding encoding = StringEncoding.UTF8)
         {
-            var byt = Encoding.UTF8.GetBytes(message);
+            var byt = message.FromString(encoding);
             if (byt.Length < 112)
             {
                 var shortRsa = new ShortMessageRsa(KeyPair);

@@ -23,7 +23,7 @@ namespace Galleon.tests
             T.TransactionInputs[1].UTXO = o2;
             var json = T.ToJson();
             var NT = json.FromJson<Transaction>();
-            Assert.True(Equal(T, NT));
+            Assert.True(T==NT);
             Assert.Equal(json, NT.ToJson());
         }
         private bool Equal(Transaction t1,Transaction t2)

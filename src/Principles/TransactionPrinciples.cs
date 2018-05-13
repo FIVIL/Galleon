@@ -5,7 +5,7 @@ using System.Text;
 using Galleon.Util;
 namespace Galleon.Principles
 {
-    public class TransactionPrinciples:BasePrinciples
+    public class TransactionPrinciples:BasePrinciples, IEquatable<TransactionPrinciples>
     {
         public double Max { get; private set; }
         public double Min { get; private set; }
@@ -40,16 +40,23 @@ namespace Galleon.Principles
             this.Max = Max;
             this.Min = Min;
         }
-        public TransactionPrinciples(string json)
-        {
-            var tp = json.FromJson<TransactionPrinciples>();
-            this.Version = tp.Version;
-            this.ID = tp.ID;
-            this.VersionDecryption = tp.VersionDecryption;
-            this.ShortTerms = tp.ShortTerms;
-            this.Max = tp.Max;
-            this.Min = tp.Min;
-        }
+
         #endregion
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as TransactionPrinciples);
+        }
+
+        public bool Equals(TransactionPrinciples other)
+        {
+            return other != null &&
+                   base.Equals(other) &&
+                   Max == other.Max &&
+                   Min == other.Min;
+        }
+        public static bool operator ==(TransactionPrinciples principles1, TransactionPrinciples principles2) => EqualityComparer<TransactionPrinciples>.Default.Equals(principles1, principles2);
+
+        public static bool operator !=(TransactionPrinciples principles1, TransactionPrinciples principles2) => !(principles1 == principles2);
+
     }
 }

@@ -7,7 +7,7 @@ using Galleon.Principles;
 using Galleon.Util;
 namespace Galleon.ContractManager.TransactionManager
 {
-    public class Transaction : ContractBase, IPrinciples, IContract
+    public class Transaction : ContractBase, IPrinciples, IContract, IEquatable<Transaction>
     {
         public byte TransactionVersion { get; set; }
         public TransactionPrinciples TransactionPrinciple { get; set; }
@@ -227,6 +227,42 @@ namespace Galleon.ContractManager.TransactionManager
             return (Amount <= TransactionPrinciple.Max) && (Amount >= TransactionPrinciple.Min);
         }
 
+
+        #endregion
+
+        #region equality
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Transaction);
+        }
+
+        public bool Equals(Transaction other)
+        {
+            return other != null &&
+                   base.Equals(other) &&
+                   TransactionVersion == other.TransactionVersion &&
+                   EqualityComparer<TransactionPrinciples>.Default.Equals(TransactionPrinciple, other.TransactionPrinciple) &&
+                   TransactionIssuer == other.TransactionIssuer &&
+                   Reciepient == other.Reciepient &&
+                   Amount == other.Amount &&
+                   Sequence == other.Sequence &&
+                   IsBlockReward == other.IsBlockReward &&
+                   ListEquals<TransactionInput>(TransactionInputs, other.TransactionInputs) &&
+                   ListEquals<TransactionOutput>(TransactionOutputs, other.TransactionOutputs);
+        }
+
+        private bool ListEquals<T>(List<T> ts,List<T> ts2)
+        {
+            if (ts.Count != ts2.Count) return false;
+            for (int i = 0; i < ts.Count; i++)
+            {
+                if (!ts[i].Equals(ts2[i])) return false;
+            }
+            return true;
+        }
+        public static bool operator ==(Transaction transaction1, Transaction transaction2) => EqualityComparer<Transaction>.Default.Equals(transaction1, transaction2);
+
+        public static bool operator !=(Transaction transaction1, Transaction transaction2) => !(transaction1 == transaction2);
         #endregion
     }
 }

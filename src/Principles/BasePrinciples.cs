@@ -4,7 +4,7 @@ using System.Text;
 using Newtonsoft.Json;
 namespace Galleon.Principles
 {
-    public class BasePrinciples
+    public class BasePrinciples : IEquatable<BasePrinciples>
     {
         public byte Version { get; protected set; }
         public Guid ID { get; protected set; }
@@ -40,10 +40,26 @@ namespace Galleon.Principles
             this.VersionDecryption = VersionDecryption;
             this.ShortTerms = ShortTerms;
         }
-        public BasePrinciples()
-        {
-
-        }
         #endregion
+
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as BasePrinciples);
+        }
+
+        public bool Equals(BasePrinciples other)
+        {
+            return other != null &&
+                   Version == other.Version &&
+                   ID.Equals(other.ID) &&
+                   VersionDecryption == other.VersionDecryption &&
+                   ShortTerms == other.ShortTerms;
+        }
+
+
+        public static bool operator ==(BasePrinciples principles1, BasePrinciples principles2) => EqualityComparer<BasePrinciples>.Default.Equals(principles1, principles2);
+
+        public static bool operator !=(BasePrinciples principles1, BasePrinciples principles2) => !(principles1 == principles2);
     }
 }

@@ -5,7 +5,7 @@ using System.Text;
 using Newtonsoft.Json;
 namespace Galleon.ContractManager
 {
-    public class ContractBase
+    public class ContractBase : IEquatable<ContractBase>
     {
         public Guid ID { get; protected set; }
         public string ContractName { get; protected set; }
@@ -42,7 +42,32 @@ namespace Galleon.ContractManager
             ContractIssuer = contractIssuer;
             IssuanceTime = DateTime.Now;
         }
-
         #endregion
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as ContractBase);
+        }
+
+        public bool Equals(ContractBase other)
+        {
+            return other != null &&
+                   ID.Equals(other.ID) &&
+                   ContractName == other.ContractName &&
+                   ContractIssuer == other.ContractIssuer &&
+                   Signture == other.Signture &&
+                   IssuanceTime == other.IssuanceTime &&
+                   MinedTime == other.MinedTime &&
+                   ContainerBlockHash == other.ContainerBlockHash &&
+                   BlockNumber == other.BlockNumber;
+        }
+        public static bool operator ==(ContractBase base1, ContractBase base2)
+        {
+            return EqualityComparer<ContractBase>.Default.Equals(base1, base2);
+        }
+
+        public static bool operator !=(ContractBase base1, ContractBase base2)
+        {
+            return !(base1 == base2);
+        }
     }
 }

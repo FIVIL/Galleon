@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Galleon.ContractManager.TransactionManager
 {
-    public class TransactionInput
+    public class TransactionInput : IEquatable<TransactionInput>
     {
         public string TransactionOutputHash { get; private set; }
         public TransactionOutput UTXO { get; set; }
@@ -23,5 +23,21 @@ namespace Galleon.ContractManager.TransactionManager
             this.TransactionOutputHash = TransactionOutputHash;
             this.UTXO = UTXO;
         }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as TransactionInput);
+        }
+
+        public bool Equals(TransactionInput other)
+        {
+            return other != null &&
+                   TransactionOutputHash == other.TransactionOutputHash &&
+                   EqualityComparer<TransactionOutput>.Default.Equals(UTXO, other.UTXO);
+        }
+
+        public static bool operator ==(TransactionInput input1, TransactionInput input2) => EqualityComparer<TransactionInput>.Default.Equals(input1, input2);
+
+        public static bool operator !=(TransactionInput input1, TransactionInput input2) => !(input1 == input2);
     }
 }

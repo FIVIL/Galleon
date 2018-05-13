@@ -6,5 +6,10 @@ namespace Galleon.Principles
 {
     class BlockPrinciples:BasePrinciples
     {
+        public BlockPrinciples()
+            :base(1,"a","b")
+        {
+
+        }
     }
 }

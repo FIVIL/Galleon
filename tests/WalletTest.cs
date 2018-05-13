@@ -26,7 +26,7 @@ namespace Galleon.tests
             var T = new Transaction(DataUtilities.Version, W0.PublicKey, W1.PublicKey, 100, 0,
                 Guid.NewGuid().ToString().GetHashString(HashAlgorithms.SHA256));
             T.GenerateSignture(Galleon.IO.File.PrivateKeyFileName);
-            T.TransactionOutputs.Add(new TransactionOutput(T.Reciepient, T.Amount, T.TransactionHash));
+            T.TransactionOutputs.Add(new TransactionOutput(T.Reciepient, T.Amount, T.ContractHash));
             utxos.Add(T.TransactionOutputs[0].HashString, T.TransactionOutputs[0]);
             Assert.True(T.Process(x => true, null, null, Cleaner));
             W1.Refresh(refresh);
@@ -38,7 +38,7 @@ namespace Galleon.tests
             Assert.Equal(0, W2.Balance);
             var TF1 = new Transaction(DataUtilities.Version, W3.PublicKey, 10,10);
             TF1.GenerateSignture(Galleon.IO.File.PrivateKeyFileName);
-            TF1.TransactionOutputs.Add(new TransactionOutput(TF1.Reciepient, TF1.Amount, TF1.TransactionHash));
+            TF1.TransactionOutputs.Add(new TransactionOutput(TF1.Reciepient, TF1.Amount, TF1.ContractHash));
             utxos.Add(TF1.TransactionOutputs[0].HashString, TF1.TransactionOutputs[0]);
             Assert.True(T2.Process(x => false, null, CFA, Cleaner));
             Assert.True(TF1.Process(x => false, checkforminerreward, CFA, Cleaner));
@@ -54,7 +54,7 @@ namespace Galleon.tests
             Assert.Equal(0, W1.Balance);
             Assert.Equal(15, W2.Balance);
             var TF2 = new Transaction(DataUtilities.Version, W3.PublicKey, 10,10);
-            TF2.TransactionOutputs.Add(new TransactionOutput(TF2.Reciepient, TF2.Amount, TF2.TransactionHash));
+            TF2.TransactionOutputs.Add(new TransactionOutput(TF2.Reciepient, TF2.Amount, TF2.ContractHash));
             utxos.Add(TF2.TransactionOutputs[0].HashString, TF2.TransactionOutputs[0]);
             Assert.True(T3.Process(x => false, null, CFA, Cleaner));
             TF2.GenerateSignture(Galleon.IO.File.PrivateKeyFileName);

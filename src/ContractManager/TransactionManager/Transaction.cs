@@ -7,26 +7,18 @@ using Galleon.Principles;
 using Galleon.Util;
 namespace Galleon.ContractManager.TransactionManager
 {
-    public class Transaction : ContractBase, IPrinciples, Icontract
+    public class Transaction : ContractBase, IPrinciples, IContract
     {
-        public Guid ID { get; protected set; }
-        public string TransactionName { get; protected set; }
-        public string TransactionHash { get; protected set; }
         public byte TransactionVersion { get; set; }
         public TransactionPrinciples TransactionPrinciple { get; set; }
-        public string Issuer { get; protected set; }
+        public string TransactionIssuer { get; protected set; }
         public string Reciepient { get; protected set; }
         public double Amount { get; set; }
         public uint Sequence { get; protected set; }
-        protected Signture _signture { get; set; }
-        public string Signture { get; protected set; }
-        public DateTime IssuanceTime { get; protected set; }
-        public DateTime MinedTime { get; set; }
-        public string ContainerBlockHash { get; set; }
-        public uint BlockNumber { get; set; }
         public bool IsBlockReward { get; set; }
         public List<TransactionInput> TransactionInputs { get; protected set; }
         public List<TransactionOutput> TransactionOutputs { get; protected set; }
+
         [JsonIgnore]
         public double InputsBalance
         {
@@ -55,33 +47,43 @@ namespace Galleon.ContractManager.TransactionManager
         }
         #region ctor
         /// <summary>
-        /// json constructor
-        /// tip:never can be used!
+        /// json constructon.
+        /// only and only for json deserialization!!!
         /// </summary>
         /// <param name="ID"></param>
-        /// <param name="TransactionName"></param>
+        /// <param name="ContractName"></param>
+        /// <param name="ContractHash"></param>
+        /// <param name="ContractIssuer"></param>
+        /// <param name="Signture"></param>
+        /// <param name="IssuanceTime"></param>
+        /// <param name="MinedTime"></param>
+        /// <param name="ContainerBlockHash"></param>
+        /// <param name="BlockNumber"></param>
         /// <param name="TransactionVersion"></param>
-        /// <param name="Issuer"></param>
+        /// <param name="TransactionPrinciple"></param>
+        /// <param name="TransactionIssuer"></param>
         /// <param name="Reciepient"></param>
         /// <param name="Amount"></param>
         /// <param name="Sequence"></param>
-        /// <param name="Signture"></param>
-        /// <param name="IssuanceTime"></param>
-        /// <param name="TransactionInputs"></param>
-        /// <param name="TtransactionOutputs"></param>
         /// <param name="IsBlockReward"></param>
+        /// <param name="TransactionInputs"></param>
+        /// <param name="TransactionOutputs"></param>
         [JsonConstructor]
-        public Transaction(Guid ID, string TransactionName, string TransactionHash, byte TransactionVersion, TransactionPrinciples TransactionPrinciple,string Issuer, string Reciepient, double Amount, uint Sequence, string Signture,
-    DateTime IssuanceTime, List<TransactionInput> TransactionInputs, List<TransactionOutput> TransactionOutputs, bool IsBlockReward)
-    : this(TransactionName, TransactionVersion, Issuer, Reciepient, Amount, Sequence, TransactionInputs)
+        public Transaction(Guid ID, string ContractName, string ContractHash, string ContractIssuer, string Signture,
+            DateTime IssuanceTime, DateTime MinedTime, string ContainerBlockHash, uint BlockNumber,
+            byte TransactionVersion, TransactionPrinciples TransactionPrinciple, string TransactionIssuer, string Reciepient, double Amount, uint Sequence, bool IsBlockReward, List<TransactionInput> TransactionInputs,
+            List<TransactionOutput> TransactionOutputs) :
+            base(ID, ContractName, ContractHash, ContractIssuer, Signture, IssuanceTime, MinedTime, ContainerBlockHash, BlockNumber)
         {
-            this.ID = ID;
-            this.TransactionHash = TransactionHash;
-            this.Signture = Signture;
-            this.TransactionOutputs = TransactionOutputs;
-            this.IssuanceTime = IssuanceTime;
-            this.IsBlockReward = IsBlockReward;
+            this.TransactionVersion = TransactionVersion;
             this.TransactionPrinciple = TransactionPrinciple;
+            this.TransactionIssuer = TransactionIssuer;
+            this.Reciepient = Reciepient;
+            this.Amount = Amount;
+            this.Sequence = Sequence;
+            this.IsBlockReward = IsBlockReward;
+            this.TransactionInputs = TransactionInputs;
+            this.TransactionOutputs = TransactionOutputs;
         }
         /// <summary>
         /// for issuing new transaction in wallet
@@ -93,21 +95,20 @@ namespace Galleon.ContractManager.TransactionManager
         /// <param name="amount">amout of cash for sending</param>
         /// <param name="seq">sequance number</param>
         /// <param name="transactionInputs">inputs</param>
-        public Transaction(string name, byte version, string issuer, string reciepient, double amount, uint seq, List<TransactionInput> transactionInputs)
+        public Transaction(string name, byte version, string issuer, string reciepient, double amount, uint seq, List<TransactionInput> transactionInputs) :
+            base(name, issuer)
         {
-            ID = Guid.NewGuid();
-            TransactionName = name;
             TransactionVersion = version;
-            Issuer = issuer;
+            TransactionIssuer = issuer;
             Reciepient = reciepient;
             Amount = amount;
             Sequence = seq;
             TransactionInputs = transactionInputs;
             TransactionOutputs = new List<TransactionOutput>();
-            IssuanceTime = DateTime.UtcNow;
             IsBlockReward = false;
             Apply(TransactionVersion);
         }
+
         [Obsolete("only use in Genesis phase.")]
         /// <summary>
         /// Genesis Creator
@@ -115,30 +116,8 @@ namespace Galleon.ContractManager.TransactionManager
         public Transaction(byte version, string issuer, string reciepient, double amount, uint seq, string HashString) :
             this("Genesis", version, issuer, reciepient, amount, seq, null)
         {
-            TransactionHash = HashString;
+            ContractHash = HashString;
         }
-        /// <summary>
-        /// in miner side for proccesing and verifying transaction
-        /// </summary>
-        /// <param name="json">transaction properties</param>
-        //public Transaction(string json)
-        //{
-        //    var j = JsonConvert.DeserializeObject<Transaction>(json);
-        //    ID = j.ID;
-        //    TransactionVersion = j.TransactionVersion;
-        //    TransactionName = j.TransactionName;
-        //    Issuer = j.Issuer;
-        //    Reciepient = j.Reciepient;
-        //    Amount = j.Amount;
-        //    Sequence = j.Sequence;
-        //    Signture = j.Signture;
-        //    _signture = new Signture(Signture);
-        //    IssuanceTime = j.IssuanceTime;
-        //    TransactionInputs = j.TransactionInputs;
-        //    TransactionOutputs = j.TransactionOutputs;
-        //    IsBlockReward = j.IsBlockReward;
-        //    TransactionPrinciple = j.TransactionPrinciple;
-        //}
         /// <summary>
         /// uses in miners for creatging block reward
         /// </summary>
@@ -150,21 +129,22 @@ namespace Galleon.ContractManager.TransactionManager
         {
             IsBlockReward = true;
         }
+        #endregion
+
+        #region IContract
         public string GetHashString()
         {
-            return (ID.ToString() + Issuer + Reciepient + Amount + TransactionVersion.ToString() + Sequence.ToString()).GetHashString(HashAlgorithms.SHA256);
+            return (ID.ToString() + TransactionIssuer + Reciepient + Amount + TransactionVersion.ToString() + Sequence.ToString()).GetHashString(HashAlgorithms.SHA256);
         }
-        #endregion
-        #region signture
         /// <summary>
         /// using inside wallet for signing transaction
         /// </summary>
         /// <param name="protectedKey">issuer protectedkey path</param>
-        public void GenerateSignture(string protectedKey)
+        public void GenerateSignture(string privateKey)
         {
-            using (var rsa = new RsaSignatureProvider(protectedKey))
+            using (var rsa = new RsaSignatureProvider(privateKey))
             {
-                var data = (ID.ToString() + Issuer + Reciepient + Amount + TransactionVersion.ToString() + Sequence.ToString());
+                var data = (ID.ToString() + TransactionIssuer + Reciepient + Amount + TransactionVersion.ToString() + Sequence.ToString());
                 _signture = rsa.GenerateSignture(data);
                 Signture = _signture.Value;
             }
@@ -178,9 +158,9 @@ namespace Galleon.ContractManager.TransactionManager
             get
             {
                 bool ret = false;
-                using (var rsa = new RsaSignatureProvider(Convert.FromBase64String(Issuer)))
+                using (var rsa = new RsaSignatureProvider(Convert.FromBase64String(TransactionIssuer)))
                 {
-                    var data = (ID.ToString() + Issuer + Reciepient + Amount + TransactionVersion.ToString() + Sequence.ToString());
+                    var data = (ID.ToString() + TransactionIssuer + Reciepient + Amount + TransactionVersion.ToString() + Sequence.ToString());
                     ret = rsa.VerifySignature(data, _signture); ;
                 }
 
@@ -188,6 +168,7 @@ namespace Galleon.ContractManager.TransactionManager
             }
         }
         #endregion
+
         #region Process
         /// <summary>
         /// Processing Transaction In Miner
@@ -208,7 +189,7 @@ namespace Galleon.ContractManager.TransactionManager
             //check if Transaction Reward Or Genesis
             if (TransactionInputs == null)
             {
-                if (!string.IsNullOrEmpty(TransactionHash))
+                if (!string.IsNullOrEmpty(ContractHash))
                 {
                     var res = checkGenesis(this);
                     if (res) return cleaningUTXOs(null, TransactionOutputs);
@@ -223,17 +204,18 @@ namespace Galleon.ContractManager.TransactionManager
                 return false;
             }
             var Change = InputsBalance - Amount;
-            TransactionHash = GetHashString();
-            TransactionOutputs.Add(new TransactionOutput(Reciepient, Amount, TransactionHash));
-            TransactionOutputs.Add(new TransactionOutput(Issuer, Change, TransactionHash));
+            ContractHash = GetHashString();
+            TransactionOutputs.Add(new TransactionOutput(Reciepient, Amount, ContractHash));
+            TransactionOutputs.Add(new TransactionOutput(TransactionIssuer, Change, ContractHash));
             return cleaningUTXOs(TransactionInputs, TransactionOutputs);
         }
         public bool FinishingTransacion(Func<string, string, bool> finalize)
         {
-            return finalize(TransactionHash, ContainerBlockHash);
+            return finalize(ContractHash, ContainerBlockHash);
         }
 
         #endregion
+
         #region Principles
         public void Apply(byte version)
         {
@@ -244,6 +226,7 @@ namespace Galleon.ContractManager.TransactionManager
         {
             return (Amount <= TransactionPrinciple.Max) && (Amount >= TransactionPrinciple.Min);
         }
+
         #endregion
     }
 }

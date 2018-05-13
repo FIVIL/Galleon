@@ -15,8 +15,11 @@ namespace Galleon.Crypto
         }
         public Signture(string data)
         {
-            Value = data;
-            Data = Convert.FromBase64String(data);
+            if (!string.IsNullOrEmpty(data))
+            {
+                Value = data;
+                Data = Convert.FromBase64String(data);
+            }
         }
         public override string ToString()
         {

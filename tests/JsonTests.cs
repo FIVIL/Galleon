@@ -29,8 +29,8 @@ namespace Galleon.tests
         private bool Equal(Transaction t1,Transaction t2)
         {
             return (t1.ID == t2.ID) &&
-                (t1.TransactionName == t2.TransactionName) &&
-                (t1.TransactionHash == t2.TransactionHash) &&
+                (t1.ContractName == t2.ContractName) &&
+                (t1.ContractHash == t2.ContractHash) &&
                 (t1.TransactionVersion == t2.TransactionVersion) &&
                 (t1.TransactionPrinciple.ID == t2.TransactionPrinciple.ID) &&
                 (t1.TransactionPrinciple.Version == t2.TransactionPrinciple.Version) &&
@@ -38,7 +38,7 @@ namespace Galleon.tests
                 (t1.TransactionPrinciple.ShortTerms == t2.TransactionPrinciple.ShortTerms) &&
                 (t1.TransactionPrinciple.Min == t2.TransactionPrinciple.Min) &&
                 (t1.TransactionPrinciple.Max == t2.TransactionPrinciple.Max) &&
-                (t1.Issuer == t2.Issuer) &&
+                (t1.TransactionIssuer == t2.TransactionIssuer) &&
                 (t1.Reciepient == t2.Reciepient) &&
                 (t1.Amount == t2.Amount) &&
                 (t1.Sequence == t2.Sequence) &&

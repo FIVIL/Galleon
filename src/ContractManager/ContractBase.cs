@@ -60,6 +60,7 @@ namespace Galleon.ContractManager
                    ContainerBlockHash == other.ContainerBlockHash &&
                    BlockNumber == other.BlockNumber;
         }
+        public override int GetHashCode() => Galleon.Util.StringUtilities.ToJson(this).GetHashCode();
         public static bool operator ==(ContractBase base1, ContractBase base2)
         {
             return EqualityComparer<ContractBase>.Default.Equals(base1, base2);

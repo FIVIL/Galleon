@@ -1,0 +1,1 @@
+﻿for dictinary allways use objects hashstring(provided by system) as key

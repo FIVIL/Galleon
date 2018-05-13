@@ -54,7 +54,7 @@ namespace Galleon.tests
             ContractBase bp3 = null;
             Assert.False(bp3 != null);
             Assert.True(bp3 == null);
-            bp3 = new ContractBase("c","d");
+            bp3 = new ContractBase("c", "d");
             Assert.False(bp1 == bp3);
             Assert.True(bp1 != bp3);
         }
@@ -84,6 +84,26 @@ namespace Galleon.tests
             });
             Assert.False(bp1 == bp3);
             Assert.True(bp1 != bp3);
+        }
+        [Fact]
+        public void GetHashCodTransactionTest()
+        {
+            DataUtilities.Principles.TryAdd((DataUtilities.Version).GetPrinciplesKey(Principles.PrinciplesType.Transaction), new Galleon.Principles.TransactionPrinciples(1, "hi", "short", 1000, 1));
+            var bp1 = new Transaction("a", DataUtilities.Version, "b", "c", 12.5, 0, new List<TransactionInput>(){
+                new TransactionInput("1"),
+                new TransactionInput("2"),
+            });
+            var o1 = new TransactionOutput("c", 10, "d");
+            var o2 = new TransactionOutput("c", 2.5, "e");
+            bp1.TransactionInputs[0].UTXO = o1;
+            bp1.TransactionInputs[1].UTXO = o2;
+            var bp2 = bp1.ToJson().FromJson<Transaction>();
+            Assert.Equal(bp1.GetHashCode(), bp2.GetHashCode());
+            var bp3 = new Transaction("a", DataUtilities.Version, "b", "c", 12.5, 0, new List<TransactionInput>(){
+                new TransactionInput("1"),
+                new TransactionInput("2"),
+            });
+            Assert.NotEqual(bp1.GetHashCode(), bp3.GetHashCode());
         }
     }
 }

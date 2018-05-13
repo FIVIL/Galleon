@@ -35,7 +35,7 @@ namespace Galleon.ContractManager.TransactionManager
                    TransactionOutputHash == other.TransactionOutputHash &&
                    EqualityComparer<TransactionOutput>.Default.Equals(UTXO, other.UTXO);
         }
-
+        public override int GetHashCode() => Galleon.Util.StringUtilities.ToJson(this).GetHashCode();
         public static bool operator ==(TransactionInput input1, TransactionInput input2) => EqualityComparer<TransactionInput>.Default.Equals(input1, input2);
 
         public static bool operator !=(TransactionInput input1, TransactionInput input2) => !(input1 == input2);

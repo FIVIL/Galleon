@@ -260,6 +260,7 @@ namespace Galleon.ContractManager.TransactionManager
             }
             return true;
         }
+        public override int GetHashCode() => Galleon.Util.StringUtilities.ToJson(this).GetHashCode();
         public static bool operator ==(Transaction transaction1, Transaction transaction2) => EqualityComparer<Transaction>.Default.Equals(transaction1, transaction2);
 
         public static bool operator !=(Transaction transaction1, Transaction transaction2) => !(transaction1 == transaction2);

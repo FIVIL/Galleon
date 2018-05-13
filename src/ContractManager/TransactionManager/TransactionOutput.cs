@@ -63,6 +63,7 @@ namespace Galleon.ContractManager.TransactionManager
                    ParentTransactionHash == other.ParentTransactionHash &&
                    IssuingTime == other.IssuingTime;
         }
+        public override int GetHashCode() => Galleon.Util.StringUtilities.ToJson(this).GetHashCode();
         public static bool operator ==(TransactionOutput output1, TransactionOutput output2) => EqualityComparer<TransactionOutput>.Default.Equals(output1, output2);
 
         public static bool operator !=(TransactionOutput output1, TransactionOutput output2) => !(output1 == output2);

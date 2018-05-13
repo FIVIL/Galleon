@@ -54,6 +54,7 @@ namespace Galleon.Principles
                    Max == other.Max &&
                    Min == other.Min;
         }
+        public override int GetHashCode() => Galleon.Util.StringUtilities.ToJson(this).GetHashCode();
         public static bool operator ==(TransactionPrinciples principles1, TransactionPrinciples principles2) => EqualityComparer<TransactionPrinciples>.Default.Equals(principles1, principles2);
 
         public static bool operator !=(TransactionPrinciples principles1, TransactionPrinciples principles2) => !(principles1 == principles2);

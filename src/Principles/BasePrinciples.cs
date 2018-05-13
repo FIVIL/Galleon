@@ -57,6 +57,7 @@ namespace Galleon.Principles
                    ShortTerms == other.ShortTerms;
         }
 
+        public override int GetHashCode() => Galleon.Util.StringUtilities.ToJson(this).GetHashCode();
 
         public static bool operator ==(BasePrinciples principles1, BasePrinciples principles2) => EqualityComparer<BasePrinciples>.Default.Equals(principles1, principles2);
 

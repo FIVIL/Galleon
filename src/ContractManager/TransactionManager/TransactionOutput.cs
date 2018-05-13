@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Galleon.Util;
-namespace Galleon.TransactionManager
+namespace Galleon.ContractManager.TransactionManager
 {
     public class TransactionOutput
     {
@@ -26,16 +26,20 @@ namespace Galleon.TransactionManager
             IsProcessing = false;
             IssuingTime = DateTime.Now;
         }
-        //[JsonConstructor]
-        //public TransactionOutput(Guid ID, string Reciepient, double Amount, string ParentTransactionHash,bool IsProcessing,
-        //    string ContainerTransactionHash,string ContainerBlockHash,DateTime IssuingTime)
-        //{
-        //    this.ID = ID;
-        //    this.Reciepient = Reciepient;
-        //    this.Amount = Amount;
-        //    this.IsProcessing = IsProcessing;
-        //    this.ContainerTransactionHash=cont
-        //}
+        [JsonConstructor]
+        public TransactionOutput(Guid ID,string HashString,string Reciepient, double Amount, string ParentTransactionHash, bool IsProcessing,
+            string ContainerTransactionHash, string ContainerBlockHash, DateTime IssuingTime)
+        {
+            this.ID = ID;
+            this.HashString = HashString;
+            this.Reciepient = Reciepient;
+            this.Amount = Amount;
+            this.ParentTransactionHash = ParentTransactionHash;
+            this.IsProcessing = IsProcessing;
+            this.ContainerTransactionHash = ContainerTransactionHash;
+            this.ContainerBlockHash = ContainerBlockHash;
+            this.IssuingTime = IssuingTime;
+        }
         public bool IsMine(string Key)
         {
             return (Key == Reciepient) && !IsProcessing;

@@ -16,7 +16,7 @@ namespace Galleon.tests
             var key2 = new KeyContainer();
             key1.ExportPrivateKey("key.dat");
             DataUtilities.Principles.TryAdd((DataUtilities.Version).GetPrinciplesKey(Principles.PrinciplesType.Transaction), new Galleon.Principles.TransactionPrinciples(1, "hi", "short", 1000, 1));
-            var t1 = new Galleon.TransactionManager.Transaction(DataUtilities.Version, key1.PublicKeyS, key2.PublicKeyS, 15.5, 0, Guid.NewGuid().ToString().GetHashString(HashAlgorithms.SHA256));
+            var t1 = new Galleon.ContractManager.TransactionManager.Transaction(DataUtilities.Version, key1.PublicKeyS, key2.PublicKeyS, 15.5, 0, Guid.NewGuid().ToString().GetHashString(HashAlgorithms.SHA256));
             t1.GenerateSignture("key.dat");
             Assert.True(t1.IsSignatureVerified);
             key2.ExportPrivateKey("key.dat");

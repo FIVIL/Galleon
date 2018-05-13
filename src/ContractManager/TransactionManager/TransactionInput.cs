@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Galleon.TransactionManager
+namespace Galleon.ContractManager.TransactionManager
 {
     public class TransactionInput
     {
@@ -12,6 +12,10 @@ namespace Galleon.TransactionManager
         public TransactionInput(string TOH)
         {
             TransactionOutputHash = TOH;
+        }
+        public TransactionInput()
+        {
+
         }
         [JsonConstructor]
         public TransactionInput(string TransactionOutputHash, TransactionOutput UTXO)

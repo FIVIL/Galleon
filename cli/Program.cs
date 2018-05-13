@@ -1,4 +1,4 @@
-﻿using Galleon.TransactionManager;
+﻿using Galleon.ContractManager.TransactionManager;
 using System;
 using System.Collections.Generic;
 using Galleon.Crypto;
@@ -12,7 +12,6 @@ namespace Galleon.cli
     {
         static void Main(string[] args)
         {
-
         }
     }
 }

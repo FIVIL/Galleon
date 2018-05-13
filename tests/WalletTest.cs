@@ -5,7 +5,7 @@ using Xunit;
 using Galleon.Crypto;
 using Galleon.WalletManager;
 using Galleon.Util;
-using Galleon.TransactionManager;
+using Galleon.ContractManager.TransactionManager;
 
 namespace Galleon.tests
 {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Galleon.Crypto;
-using Galleon.TransactionManager;
+using Galleon.ContractManager.TransactionManager;
 using Galleon.Util;
 namespace Galleon.WalletManager
 {
@@ -104,7 +104,7 @@ namespace Galleon.WalletManager
                 item.IsProcessing = true;
                 if (TotalInputsAmounts >= amount) break;
             }
-            var newTransaction = new Galleon.TransactionManager.Transaction(transactionName, DataUtilities.Version, PublicKey, recipientPublicKey,
+            var newTransaction = new Galleon.ContractManager.TransactionManager.Transaction(transactionName, DataUtilities.Version, PublicKey, recipientPublicKey,
                 amount, seq, inputs);
             newTransaction.GenerateSignture(PrivateKeyFilePath);
             List<TransactionOutput> ProcessingUtxos = new List<TransactionOutput>();

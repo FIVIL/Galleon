@@ -5,9 +5,9 @@ using Galleon.Crypto;
 using Newtonsoft.Json;
 using Galleon.Principles;
 using Galleon.Util;
-namespace Galleon.TransactionManager
+namespace Galleon.ContractManager.TransactionManager
 {
-    public class Transaction : IPrinciples
+    public class Transaction : ContractBase, IPrinciples, Icontract
     {
         public Guid ID { get; protected set; }
         public string TransactionName { get; protected set; }
@@ -27,6 +27,7 @@ namespace Galleon.TransactionManager
         public bool IsBlockReward { get; set; }
         public List<TransactionInput> TransactionInputs { get; protected set; }
         public List<TransactionOutput> TransactionOutputs { get; protected set; }
+        [JsonIgnore]
         public double InputsBalance
         {
             get
@@ -39,6 +40,7 @@ namespace Galleon.TransactionManager
                 return retValue;
             }
         }
+        [JsonIgnore]
         public double OutputsBalance
         {
             get
@@ -69,15 +71,17 @@ namespace Galleon.TransactionManager
         /// <param name="TtransactionOutputs"></param>
         /// <param name="IsBlockReward"></param>
         [JsonConstructor]
-        public Transaction(Guid ID, string TransactionName, byte TransactionVersion, string Issuer, string Reciepient, double Amount, uint Sequence, string Signture,
-    DateTime IssuanceTime, List<TransactionInput> TransactionInputs, List<TransactionOutput> TtransactionOutputs, bool IsBlockReward)
+        public Transaction(Guid ID, string TransactionName, string TransactionHash, byte TransactionVersion, TransactionPrinciples TransactionPrinciple,string Issuer, string Reciepient, double Amount, uint Sequence, string Signture,
+    DateTime IssuanceTime, List<TransactionInput> TransactionInputs, List<TransactionOutput> TransactionOutputs, bool IsBlockReward)
     : this(TransactionName, TransactionVersion, Issuer, Reciepient, Amount, Sequence, TransactionInputs)
         {
             this.ID = ID;
+            this.TransactionHash = TransactionHash;
             this.Signture = Signture;
-            this.TransactionOutputs = TtransactionOutputs;
+            this.TransactionOutputs = TransactionOutputs;
             this.IssuanceTime = IssuanceTime;
             this.IsBlockReward = IsBlockReward;
+            this.TransactionPrinciple = TransactionPrinciple;
         }
         /// <summary>
         /// for issuing new transaction in wallet
@@ -117,31 +121,31 @@ namespace Galleon.TransactionManager
         /// in miner side for proccesing and verifying transaction
         /// </summary>
         /// <param name="json">transaction properties</param>
-        public Transaction(string json)
-        {
-            var j = JsonConvert.DeserializeObject<Transaction>(json);
-            ID = j.ID;
-            TransactionVersion = j.TransactionVersion;
-            TransactionName = j.TransactionName;
-            Issuer = j.Issuer;
-            Reciepient = j.Reciepient;
-            Amount = j.Amount;
-            Sequence = j.Sequence;
-            Signture = j.Signture;
-            _signture = new Signture(Signture);
-            IssuanceTime = j.IssuanceTime;
-            TransactionInputs = j.TransactionInputs;
-            TransactionOutputs = j.TransactionOutputs;
-            IsBlockReward = j.IsBlockReward;
-            TransactionPrinciple = j.TransactionPrinciple;
-        }
+        //public Transaction(string json)
+        //{
+        //    var j = JsonConvert.DeserializeObject<Transaction>(json);
+        //    ID = j.ID;
+        //    TransactionVersion = j.TransactionVersion;
+        //    TransactionName = j.TransactionName;
+        //    Issuer = j.Issuer;
+        //    Reciepient = j.Reciepient;
+        //    Amount = j.Amount;
+        //    Sequence = j.Sequence;
+        //    Signture = j.Signture;
+        //    _signture = new Signture(Signture);
+        //    IssuanceTime = j.IssuanceTime;
+        //    TransactionInputs = j.TransactionInputs;
+        //    TransactionOutputs = j.TransactionOutputs;
+        //    IsBlockReward = j.IsBlockReward;
+        //    TransactionPrinciple = j.TransactionPrinciple;
+        //}
         /// <summary>
         /// uses in miners for creatging block reward
         /// </summary>
         /// <param name="version">block version</param>
         /// <param name="reciepient">sender and reciepient which both are the same</param>
         /// <param name="seq">block number</param>
-        public Transaction(byte version, string reciepient, uint seq,double blockRewardAmount)
+        public Transaction(byte version, string reciepient, uint seq, double blockRewardAmount)
             : this("Block Reward", version, reciepient, reciepient, blockRewardAmount, seq, null)
         {
             IsBlockReward = true;
@@ -165,6 +169,7 @@ namespace Galleon.TransactionManager
                 Signture = _signture.Value;
             }
         }
+        [JsonIgnore]
         /// <summary>
         /// for verifying transaction at miner side
         /// </summary>

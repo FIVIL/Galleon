@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Galleon.Crypto;
-using Galleon.TransactionManager;
+using Galleon.ContractManager.TransactionManager;
 using System.Linq;
 using Galleon.Principles;
 

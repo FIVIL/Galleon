@@ -34,8 +34,8 @@ namespace Galleon.Principles
         /// <param name="versionDecryption"></param>
         /// <param name="shortTerms"></param>
         [JsonConstructor]
-        public TransactionPrinciples(byte Version, Guid ID, string VersionDecryption, string ShortTerms,double Max,double Min)
-            :base(Version,ID,VersionDecryption,ShortTerms)
+        public TransactionPrinciples(byte Version, Guid ID, string VersionDecryption, string ShortTerms, double Max, double Min)
+            : base(Version, ID, VersionDecryption, ShortTerms)
         {
             this.Max = Max;
             this.Min = Min;
